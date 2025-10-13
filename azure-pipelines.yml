@@ -18,8 +18,8 @@ stages:
   jobs:
   - job: Build
     pool:
-      name: eShopOnWebSelfPool
-      demands: Agent.Name -equals eShopOnWebSelfAgent
+      name: AdminNico-AP
+      demands: Agent.Name -equals AdminNico
       
     steps:
     - task: DotNetCoreCLI@2
