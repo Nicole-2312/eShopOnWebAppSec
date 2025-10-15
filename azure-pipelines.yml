@@ -74,6 +74,22 @@ stages:
         artifact: 'Bicep'
         publishLocation: 'pipeline'
 
+    - task: SonarQubePrepare@7
+      inputs:
+        SonarQube: 'AppSecNico-SQCon'
+        scannerMode: 'dotnet'
+        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
+        projectName: 'AppSecNico'
+
+    - task: SonarQubePublish@7
+      inputs:
+        pollingTimeoutSec: '300'
+
+    - task: SonarQubeAnalyze@7
+      inputs:
+        jdkversion: 'JAVA_HOME_17_X64'
+  
+
 #- stage: Deploy
 #   displayName: Deploy to an Azure Web App
 #  jobs:
