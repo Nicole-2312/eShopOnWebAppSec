@@ -19,7 +19,6 @@ stages:
   - job: Build
     pool:
       name: AdminNico-AP
-      demands: Agent.Name -equals AdminNico
       
     steps:
     - task: DotNetCoreCLI@2
