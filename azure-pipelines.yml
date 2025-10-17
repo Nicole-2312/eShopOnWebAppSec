@@ -80,6 +80,8 @@ stages:
         scannerMode: 'dotnet'
         projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
         projectName: 'AppSecNico'
+        extraProperties: |
+          sonar.branch.name=
     
     - task: DotNetCoreCLI@2
       displayName: Build
