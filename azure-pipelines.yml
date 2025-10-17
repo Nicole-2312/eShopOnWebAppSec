@@ -26,7 +26,7 @@ stages:
       inputs:
         SonarQube: 'AppSecNico-SQCon'
         scannerMode: 'dotnet'
-        projectKey: 'key'
+        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
         projectName: 'AppSecNico'
 
     - task: DotNetCoreCLI@2
