@@ -23,13 +23,6 @@ stages:
       
     steps:
 
-    - task: SonarQubePrepare@5
-      inputs:
-        SonarQube: 'AppSecNico-SQCon'
-        scannerMode: 'MSBuild'
-        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
-        projectName: 'AppSecNico'
-
     - task: DotNetCoreCLI@2
       displayName: Restore
       inputs:
@@ -74,6 +67,32 @@ stages:
         targetPath: '$(Build.ArtifactStagingDirectory)'
         artifact: 'Website'
         publishLocation: 'pipeline'
+
+    - task: SonarQubePrepare@5
+      inputs:
+        SonarQube: 'AppSecNico-SQCon'
+        scannerMode: 'MSBuild'
+        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
+        projectName: 'AppSecNico'
+
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: 'restore'
+        projects: '**/*.sln'
+        feedsToUse: 'select'
+        
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        command: 'build'
+        projects: '**/*.sln'
+
+    - task: SonarQubeAnalyze@5
+
+    - task: SonarQubePublish@5
+      inputs:
+        pollingTimeoutSec: '300'
      
 
 
