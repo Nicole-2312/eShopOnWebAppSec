@@ -26,7 +26,7 @@ stages:
       inputs:
         SonarQube: 'AppSecNico-SQCon'
         scannerMode: 'dotnet'
-        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
+        projectKey: 'key'
         projectName: 'AppSecNico'
 
     - task: DotNetCoreCLI@2
@@ -59,29 +59,10 @@ stages:
       inputs:
         command: 'test'
         projects: 'tests/FunctionalTests/*.csproj'
-    
-    - task: DotNetCoreCLI@2
-      displayName: Publish
-      inputs:
-        command: 'publish'
-        publishWebProjects: true
-        arguments: '-o $(Build.ArtifactStagingDirectory)'
-    
-    - task: PublishPipelineArtifact@1
-      displayName: Publish Artifacts ADO - Website
-      inputs:
-        targetPath: '$(Build.ArtifactStagingDirectory)'
-        artifact: 'Website'
-        publishLocation: 'pipeline'
-     
-    #- task: PublishPipelineArtifact@1
-     # displayName: Publish Artifacts ADO - Bicep
-      #inputs:
-       # targetPath: '$(Build.SourcesDirectory)/infra/webapp.bicep'
-        #artifact: 'Bicep'
-        #publishLocation: 'pipeline'
 
     - task: SonarQubeAnalyze@7
+      inputs:
+        jdkversion: 'JAVA_HOME_21_X64'
       
     - task: SonarQubePublish@7
       inputs:
