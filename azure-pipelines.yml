@@ -22,6 +22,13 @@ stages:
       demands: Agent.Name -equals AdminNico
       
     steps:
+    - task: SonarQubePrepare@7
+      inputs:
+        SonarQube: 'AppSecNico-SQCon'
+        scannerMode: 'dotnet'
+        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
+        projectName: 'AppSecNico'
+
     - task: DotNetCoreCLI@2
       displayName: Restore
       inputs:
@@ -74,29 +81,6 @@ stages:
         #artifact: 'Bicep'
         #publishLocation: 'pipeline'
 
-
-    - task: SonarQubePrepare@7
-      inputs:
-        SonarQube: 'AppSecNico-SQCon'
-        scannerMode: 'dotnet'
-        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
-        projectName: 'AppSecNico'
-        extraProperties: |
-          sonar.branch.name=''
-
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: 'restore'
-        projects: '**/*.sln'
-        feedsToUse: 'select'
-        
-    - task: DotNetCoreCLI@2
-      displayName: Build
-      inputs:
-        command: 'build'
-        projects: '**/*.sln'
-
     - task: SonarQubeAnalyze@7
       
     - task: SonarQubePublish@7
@@ -104,29 +88,5 @@ stages:
         pollingTimeoutSec: '300'
   
 
-#- stage: Deploy
-#   displayName: Deploy to an Azure Web App
-#  jobs:
-#  - deployment: Deploy
-#    environment: approvals
-#    pool:
-#      name: eShopOnWebSelfPool
-#      demands: Agent.Name -equals eShopOnWebSelfAgent
-#    strategy:
-#      runOnce:
-#        deploy:
-#          steps:
-#            - task: DownloadBuildArtifacts@1
-#              inputs:
-#                buildType: 'current'
-#                downloadType: 'specific'
-#                downloadPath: '$(Build.ArtifactStagingDirectory)'
-    
-#            - task: AzureRmWebAppDeployment@5
-#              inputs:
-#                ConnectionType: 'AzureRM'
-#                azureSubscription: 'Azure Connection'
-#                appType: 'webApp'
-#                WebAppName: 'Web-App-2'
-#                packageForLinux: '$(Build.ArtifactStagingDirectory)/**/Web.zip'
-#                AppSettings: '-UseOnlyInMemoryDatabase true -ASPNETCORE_ENVIRONMENT Development'
+
+
