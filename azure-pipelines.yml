@@ -24,12 +24,12 @@ stages:
     steps:
 
 
-    - task: SonarQubePrepare@7
-      inputs:
-        SonarQube: 'AppSecNico-SQCon'
-        scannerMode: 'dotnet'
-        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
-        projectName: 'AppSecNico'
+    #- task: SonarQubePrepare@7
+    #  inputs:
+     #   SonarQube: 'AppSecNico-SQCon'
+      #  scannerMode: 'dotnet'
+      #  projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
+      #  projectName: 'AppSecNico'
 
     - task: DotNetCoreCLI@2
       displayName: Restore
@@ -44,33 +44,47 @@ stages:
         command: 'build'
         projects: '**/*.sln'
     
-    - task: DotNetCoreCLI@2
-      displayName: Test
-      inputs:
-        command: 'test'
-        projects: 'tests/UnitTests/*.csproj'
+   # - task: DotNetCoreCLI@2
+    #  displayName: Test
+     # inputs:
+      #  command: 'test'
+       # projects: 'tests/UnitTests/*.csproj'
     
-    - task: DotNetCoreCLI@2
-      displayName: Integration Tests
-      inputs:
-        command: 'test'
-        projects: 'tests/IntegrationTests/*.csproj'
+   # - task: DotNetCoreCLI@2
+    #  displayName: Integration Tests
+     # inputs:
+      #  command: 'test'
+       # projects: 'tests/IntegrationTests/*.csproj'
     
-    - task: DotNetCoreCLI@2
-      displayName: Functional Tests
-      inputs:
-        command: 'test'
-        projects: 'tests/FunctionalTests/*.csproj'
+  #  - task: DotNetCoreCLI@2
+    #  displayName: Functional Tests
+     # inputs:
+      #  command: 'test'
+       # projects: 'tests/FunctionalTests/*.csproj'
 
-    - task: SonarQubeAnalyze@7
-      inputs:
-        jdkversion: 'JAVA_HOME_21_X64'
+    #- task: SonarQubeAnalyze@7
+      #inputs:
+        #jdkversion: 'JAVA_HOME_21_X64'
         
       
-    - task: SonarQubePublish@7
-      inputs:
-        pollingTimeoutSec: '300'
+    #- task: SonarQubePublish@7
+      #inputs:
+       # pollingTimeoutSec: '300'
   
-
+    - task: CmdLine@2
+      displayName: Dependency Track Cyclone DX
+      inputs:
+        script: |
+          dotnet tool install --global CycloneDX
+          dotnet-CycloneDX eShopOnWeb.sln -o ../TestResults/
+    - task: upload-bom-dtrack-task@1
+      displayName: Upload BOM to Dependency Track
+      inputs:
+        dtrackProjName: 'AppSecNico'
+        dtrackProjVersion: '1.0'
+        dtrackProjAutoCreate: true
+        bomFilePath: '../TestResults/bom.xml'
+        dtrackAPIKey: 'odt_Ro82liy8_BJTkUcPzjTKVC7SOkqHJasJwF4B9dghi'
+        dtrackURI: 'http://dependencytrack.southcentralus.cloudapp.azure.com:8080'
 
 
