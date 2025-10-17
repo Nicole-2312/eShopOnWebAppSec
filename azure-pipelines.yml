@@ -74,15 +74,15 @@ stages:
         #artifact: 'Bicep'
         #publishLocation: 'pipeline'
 
-    - task: SonarQubePrepare@7
+    - task: SonarQubePrepare@7 
       inputs:
         SonarQube: 'AppSecNico-SQCon'
         scannerMode: 'dotnet'
         projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
         projectName: 'AppSecNico'
         extraProperties: |
-          sonar.branch.name=
-    
+          sonar.branch.name='
+
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
