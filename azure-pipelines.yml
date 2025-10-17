@@ -67,12 +67,12 @@ stages:
         artifact: 'Website'
         publishLocation: 'pipeline'
      
-    - task: PublishPipelineArtifact@1
-      displayName: Publish Artifacts ADO - Bicep
-      inputs:
-        targetPath: '$(Build.SourcesDirectory)/infra/webapp.bicep'
-        artifact: 'Bicep'
-        publishLocation: 'pipeline'
+    #- task: PublishPipelineArtifact@1
+     # displayName: Publish Artifacts ADO - Bicep
+      #inputs:
+       # targetPath: '$(Build.SourcesDirectory)/infra/webapp.bicep'
+        #artifact: 'Bicep'
+        #publishLocation: 'pipeline'
 
     - task: SonarQubePrepare@7
       inputs:
