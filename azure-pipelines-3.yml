@@ -17,12 +17,6 @@ steps:
       java -version
     displayName: "Sanity: agent & java"
 
-  - task: UseDotNet@2
-    displayName: "Install .NET SDK 6.x (fallback)"
-    inputs:
-      packageType: 'sdk'
-      version: '6.x'
-
   - task: SonarQubePrepare@5
     inputs:
       SonarQube: 'AppSecNico-SQCon'
