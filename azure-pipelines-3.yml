@@ -1,0 +1,79 @@
+#NAME THE PIPELINE SAME AS FILE (WITHOUT ".yml")
+trigger:
+   branches:
+     include:
+     - main
+   paths:
+     include:
+     - src/web/*
+
+resources:
+  repositories:
+    - repository: self
+      trigger: none
+
+stages:
+- stage: Build
+  displayName: Build .Net Core Solution
+  jobs:
+  - job: Build
+    pool:
+      name: AdminNico-AP
+      demands: Agent.Name -equals AdminNico
+      
+    steps:
+
+    - task: SonarQubePrepare@5
+      inputs:
+        SonarQube: 'AppSecNico-SQCon'
+        scannerMode: 'MSBuild'
+        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
+        projectName: 'AppSecNico'
+
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: 'restore'
+        projects: '**/*.sln'
+        feedsToUse: 'select'
+        
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        command: 'build'
+        projects: '**/*.sln'
+    
+    - task: DotNetCoreCLI@2
+      displayName: Test
+      inputs:
+        command: 'test'
+        projects: 'tests/UnitTests/*.csproj'
+    
+    - task: DotNetCoreCLI@2
+      displayName: Integration Tests
+      inputs:
+        command: 'test'
+        projects: 'tests/IntegrationTests/*.csproj'
+    
+    - task: DotNetCoreCLI@2
+      displayName: Functional Tests
+      inputs:
+        command: 'test'
+        projects: 'tests/FunctionalTests/*.csproj'
+    
+    - task: DotNetCoreCLI@2
+      displayName: Publish
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        arguments: '-o $(Build.ArtifactStagingDirectory)'
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish Artifacts ADO - Website
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: 'Website'
+        publishLocation: 'pipeline'
+     
+
+
