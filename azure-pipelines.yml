@@ -80,14 +80,20 @@ stages:
         scannerMode: 'dotnet'
         projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
         projectName: 'AppSecNico'
-
-    - task: SonarQubePublish@7
+    
+    - task: DotNetCoreCLI@2
+      displayName: Build
       inputs:
-        pollingTimeoutSec: '300'
+        command: 'build'
+        projects: '**/*.sln'
 
     - task: SonarQubeAnalyze@7
       inputs:
         jdkversion: 'JAVA_HOME_17_X64'
+  
+    - task: SonarQubePublish@7
+      inputs:
+        pollingTimeoutSec: '300'
   
 
 #- stage: Deploy
