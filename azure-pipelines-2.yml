@@ -22,6 +22,13 @@ stages:
       demands: Agent.Name -equals AdminNico
       
     steps:
+    - task: SonarQubePrepare@5
+      inputs:
+        SonarQube: 'AppSecNico-SQCon'
+        scannerMode: 'DotNet'
+        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
+        projectName: 'AppSecNico'
+       
     - task: DotNetCoreCLI@2
       displayName: Restore
       inputs:
@@ -67,35 +74,6 @@ stages:
         artifact: 'Website'
         publishLocation: 'pipeline'
      
-    #- task: PublishPipelineArtifact@1
-     # displayName: Publish Artifacts ADO - Bicep
-      #inputs:
-       # targetPath: '$(Build.SourcesDirectory)/infra/webapp.bicep'
-        #artifact: 'Bicep'
-        #publishLocation: 'pipeline'
-
-    # --- SonarQube tasks @5 ---
-    - task: SonarQubePrepare@5
-      inputs:
-        SonarQube: 'AppSecNico-SQCon'
-        scannerMode: 'MSBuild'
-        projectKey: 'squ_2d280969690c7d49f39a012795a19f3892d6301c'
-        projectName: 'AppSecNico'
-        extraProperties: |
-          sonar.branch.name=''
-
-    - task: DotNetCoreCLI@2
-      displayName: Restore for SonarQube
-      inputs:
-        command: 'restore'
-        projects: '**/*.sln'
-        feedsToUse: 'select'
-        
-    - task: DotNetCoreCLI@2
-      displayName: Build for SonarQube
-      inputs:
-        command: 'build'
-        projects: '**/*.sln'
 
     - task: SonarQubeAnalyze@5
 
